@@ -28,6 +28,8 @@ public class GenerateAst {
       writer.println("import lombok.AllArgsConstructor;");
 
       writer.printf("abstract class %s {\n", baseName);
+      
+      defineVisitor(writer, baseName, types);
 
       for (String type : types) {
         String[] splitType = type.split(":");
@@ -37,10 +39,23 @@ public class GenerateAst {
 
         defineType(writer, baseName, className, fields);
       }
+      
+      writer.println("abstract <R> R accept(Visitor<R> visitor);");
 
       writer.println("}");
     }
 
+  }
+  
+  private static void defineVisitor(PrintWriter writer, String baseName, List<String> types) {
+    writer.println("interface Visitor<R> {");
+    
+    for (String type: types) {
+      String typeName = type.split(":")[0].trim();
+      writer.printf("R visit%s%s(%s %s);%n", typeName, baseName, typeName, baseName.toLowerCase());
+    }
+    
+    writer.println("}");
   }
 
   private static void defineType(PrintWriter writer, String baseName, String className, String fieldList) {
@@ -48,8 +63,13 @@ public class GenerateAst {
     writer.printf("static class %s extends %s {\n", className, baseName);
     
     for (String field : fieldList.split(", ")) {
-      writer.printf("final %s;", field);
+      writer.printf("final %s;%n", field);
     }
+
+    writer.println("@Override");
+    writer.println("<R> R accept(Visitor<R> visitor) {");
+    writer.printf("return visitor.visit%s%s(this);%n}", className, baseName);
+    
     
     writer.println("}");
   }
