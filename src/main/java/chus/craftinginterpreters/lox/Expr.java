@@ -11,6 +11,8 @@ abstract class Expr {
     R visitLiteralExpr(Literal expr);
 
     R visitUnaryExpr(Unary expr);
+
+    R visitVariableExpr(Variable expr);
   }
 
   @AllArgsConstructor
@@ -53,6 +55,16 @@ abstract class Expr {
     @Override
     <R> R accept(Visitor<R> visitor) {
       return visitor.visitUnaryExpr(this);
+    }
+  }
+
+  @AllArgsConstructor
+  static class Variable extends Expr {
+    final Token name;
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitVariableExpr(this);
     }
   }
 

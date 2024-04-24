@@ -20,3 +20,11 @@
     hand operand. In other words, detect a binary operator appearing at the beginning
     of an expression. Report that as an error, but also parse and discard a right-hand 
     operand with the appropriate precedence
+[ ] Many languages define + such that if either operand is a string, the other is 
+    converted to a string and the results are then concatenated. For example,
+    "scone" + 4 would yield scone4. Extend the code in visitBinaryExpr() to support that. 
+[X] What happens right now if you divide a number by zero? What do you think should 
+    happen? Justify your choice. How do other languages you know handle division by
+    zero and why do they make the choices they do?
+    Change the implementation in visitBinaryExpr() to detect and report a
+    runtime error for this case.
