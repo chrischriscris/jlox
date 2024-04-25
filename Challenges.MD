@@ -28,3 +28,10 @@
     zero and why do they make the choices they do?
     Change the implementation in visitBinaryExpr() to detect and report a
     runtime error for this case.
+[ ] The REPL no longer supports entering a single expression and automatically
+    printing its result value. That’s a drag. Add support to the REPL to let users type in
+    both statements and expressions. If they enter a statement, execute it. If they enter
+    an expression, evaluate it and display the result value
+[ ] Maybe you want Lox to be a little more explicit about variable initialization. Instead
+    of implicitly initializing variables to nil, make it a runtime error to access a
+    variable that has not been initialized or assigned to.
