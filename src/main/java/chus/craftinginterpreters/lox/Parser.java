@@ -1,16 +1,14 @@
 package chus.craftinginterpreters.lox;
 
-import lombok.RequiredArgsConstructor;
+import static chus.craftinginterpreters.lox.TokenType.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static chus.craftinginterpreters.lox.TokenType.*;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class Parser {
-  private static class ParseError extends RuntimeException {
-  }
+  private static class ParseError extends RuntimeException {}
 
   private final List<Token> tokens;
   private int current = 0;
@@ -24,7 +22,7 @@ public class Parser {
     return statements;
   }
 
-  // ===== Parsing logic ===== 
+  // ===== Parsing logic =====
 
   private Stmt declaration() {
     try {
@@ -166,7 +164,7 @@ public class Parser {
     throw error(peek(), "Expect expression.");
   }
 
-  // ===== Helpers ===== 
+  // ===== Helpers =====
 
   private boolean match(TokenType... types) {
     for (TokenType type : types) {
@@ -229,19 +227,18 @@ public class Parser {
       }
 
       switch (peek().type) {
-      case CLASS:
-      case FUN:
-      case VAR:
-      case FOR:
-      case IF:
-      case WHILE:
-      case PRINT:
-      case RETURN:
-        return;
+        case CLASS:
+        case FUN:
+        case VAR:
+        case FOR:
+        case IF:
+        case WHILE:
+        case PRINT:
+        case RETURN:
+          return;
       }
 
       advance();
     }
-
   }
 }

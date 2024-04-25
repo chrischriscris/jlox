@@ -34,7 +34,7 @@ public class Lox {
     if (hadError) {
       System.exit(65);
     }
-    
+
     if (hadRuntimeError) {
       System.exit(70);
     }
@@ -92,5 +92,4 @@ public class Lox {
     System.err.printf("[line %d] Error %s: %s%n", line, where, message);
     hadError = true;
   }
-
 }

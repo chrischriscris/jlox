@@ -1,8 +1,5 @@
 package chus.craftinginterpreters.lox;
 
-import chus.craftinginterpreters.lox.RuntimeError;
-import chus.craftinginterpreters.lox.Token;
-
 import java.util.HashMap;
 import java.util.Map;
 

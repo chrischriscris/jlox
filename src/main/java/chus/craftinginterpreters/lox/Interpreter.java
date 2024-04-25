@@ -7,14 +7,14 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
   void interpret(List<Stmt> statements) {
     try {
-      for (Stmt statement: statements) {
+      for (Stmt statement : statements) {
         execute(statement);
       }
     } catch (RuntimeError error) {
       Lox.runtimeError(error);
     }
   }
-  
+
   private void execute(Stmt stmt) {
     stmt.accept(this);
   }
@@ -22,7 +22,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   private Object evaluate(Expr expr) {
     return expr.accept(this);
   }
-  
+
   // ===== Interpreting logic =====
   @Override
   public Void visitVarStmt(Stmt.Var stmt) {
@@ -30,23 +30,23 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     if (stmt.initializer != null) {
       value = evaluate(stmt.initializer);
     }
-    
+
     environment.define(stmt.name.lexeme, value);
     return null;
   }
-  
+
   @Override
   public Void visitPrintStmt(Stmt.Print stmt) {
     Object value = evaluate(stmt.expression);
     System.out.println(stringify(value));
-    
+
     return null;
   }
 
   @Override
   public Void visitExpressionStmt(Stmt.Expression stmt) {
     evaluate(stmt.expression);
-    
+
     return null;
   }
 
@@ -91,7 +91,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
       }
       case SLASH -> {
         checkNumberOperands(expr.operator, left, right);
-        if ((double)right == 0) {
+        if ((double) right == 0) {
           throw new RuntimeError(expr.operator, "Cannot divide by zero.");
         }
 
@@ -102,7 +102,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         yield (double) left * (double) right;
       }
 
-      // Unreachable
+        // Unreachable
       default -> null;
     };
   }
@@ -128,7 +128,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         yield -(double) right;
       }
 
-      // Unreachable
+        // Unreachable
       default -> null;
     };
   }

@@ -13,13 +13,28 @@ public class GenerateAst {
     }
 
     String outputDir = args[0];
-    defineAst(outputDir, "Expr", Arrays.asList("Binary: Expr left, Token operator, Expr right", "Grouping: Expr expression", "Literal: Object value",
-        "Unary: Token operator, Expr right", "Variable: Token name"));
+    defineAst(
+        outputDir,
+        "Expr",
+        Arrays.asList(
+            "Assign: Token name, Expr value",
+            "Binary: Expr left, Token operator, Expr right",
+            "Grouping: Expr expression",
+            "Literal: Object value",
+            "Unary: Token operator, Expr right",
+            "Variable: Token name"));
 
-    defineAst(outputDir, "Stmt", Arrays.asList("Expression: Expr expression", "Print: Expr expression", "Var: Token name, Expr initializer"));
+    defineAst(
+        outputDir,
+        "Stmt",
+        Arrays.asList(
+            "Expression: Expr expression",
+            "Print: Expr expression",
+            "Var: Token name, Expr initializer"));
   }
 
-  private static void defineAst(String outputDir, String baseName, List<String> types) throws IOException {
+  private static void defineAst(String outputDir, String baseName, List<String> types)
+      throws IOException {
     String path = String.format("%s/%s.java", outputDir, baseName);
 
     try (PrintWriter writer = new PrintWriter(path, "UTF-8")) {
@@ -30,7 +45,7 @@ public class GenerateAst {
       writer.println("import lombok.AllArgsConstructor;");
 
       writer.printf("abstract class %s {\n", baseName);
-      
+
       defineVisitor(writer, baseName, types);
 
       for (String type : types) {
@@ -41,29 +56,29 @@ public class GenerateAst {
 
         defineType(writer, baseName, className, fields);
       }
-      
+
       writer.println("abstract <R> R accept(Visitor<R> visitor);");
 
       writer.println("}");
     }
-
   }
-  
+
   private static void defineVisitor(PrintWriter writer, String baseName, List<String> types) {
     writer.println("interface Visitor<R> {");
-    
-    for (String type: types) {
+
+    for (String type : types) {
       String typeName = type.split(":")[0].trim();
       writer.printf("R visit%s%s(%s %s);%n", typeName, baseName, typeName, baseName.toLowerCase());
     }
-    
+
     writer.println("}");
   }
 
-  private static void defineType(PrintWriter writer, String baseName, String className, String fieldList) {
+  private static void defineType(
+      PrintWriter writer, String baseName, String className, String fieldList) {
     writer.println("@AllArgsConstructor");
     writer.printf("static class %s extends %s {\n", className, baseName);
-    
+
     for (String field : fieldList.split(", ")) {
       writer.printf("final %s;%n", field);
     }
@@ -71,7 +86,7 @@ public class GenerateAst {
     writer.println("@Override");
     writer.println("<R> R accept(Visitor<R> visitor) {");
     writer.printf("return visitor.visit%s%s(this);%n}", className, baseName);
-    
+
     writer.println("}");
   }
 }
