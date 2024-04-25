@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 
 abstract class Expr {
   interface Visitor<R> {
+    R visitAssignExpr(Assign expr);
+
     R visitBinaryExpr(Binary expr);
 
     R visitGroupingExpr(Grouping expr);
@@ -13,6 +15,17 @@ abstract class Expr {
     R visitUnaryExpr(Unary expr);
 
     R visitVariableExpr(Variable expr);
+  }
+
+  @AllArgsConstructor
+  static class Assign extends Expr {
+    final Token name;
+    final Expr value;
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitAssignExpr(this);
+    }
   }
 
   @AllArgsConstructor
