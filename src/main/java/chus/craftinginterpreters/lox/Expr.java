@@ -1,10 +1,13 @@
 package chus.craftinginterpreters.lox;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 
 abstract class Expr {
   interface Visitor<R> {
     R visitAssignExpr(Assign expr);
+
+    R visitCallExpr(Call expr);
 
     R visitBinaryExpr(Binary expr);
 
@@ -27,6 +30,18 @@ abstract class Expr {
     @Override
     <R> R accept(Visitor<R> visitor) {
       return visitor.visitAssignExpr(this);
+    }
+  }
+
+  @AllArgsConstructor
+  static class Call extends Expr {
+    final Expr callee;
+    final Token paren;
+    final List<Expr> arguments;
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitCallExpr(this);
     }
   }
 
