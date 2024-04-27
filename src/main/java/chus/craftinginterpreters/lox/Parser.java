@@ -62,6 +62,10 @@ public class Parser {
     if (match(LEFT_BRACE)) {
       return new Stmt.Block(block());
     }
+    
+    if (match(RETURN)) {
+      return returnStatement();
+    }
 
     return expressionStatement();
   }
@@ -144,6 +148,17 @@ public class Parser {
 
     consume(SEMICOLON, "Expect ';' after value.");
     return new Stmt.Expression(expr);
+  }
+  
+  private Stmt returnStatement() {
+    Token keyword = previous();
+    Expr value = null;
+    if (!check(SEMICOLON)) {
+      value = expression();
+    }
+    
+    consume(SEMICOLON, "Expect ';' after return value.");
+    return new Stmt.Return(keyword, value);
   }
 
   private Stmt.Function function(String kind) {

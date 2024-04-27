@@ -42,3 +42,32 @@
     runtime, a break statement causes execution to jump to the end of the nearest
     enclosing loop and proceeds from there. Note that the break may be nested
     inside other blocks and if statements that also need to be exited
+[ ] Lox’s function declaration syntax performs two independent operations. It creates
+    a function and also binds it to a name. This improves usability for the common
+    case where you do want to associate a name with the function. But in functionalstyled code, you o!en want to create a function to immediately pass it to some
+    other function or return it. In that case, it doesn’t need a name.
+    Languages that encourage a functional style usually support anonymous functions
+    or lambdas—an expression syntax that creates a function without binding it to a
+    name. Add anonymous function syntax to Lox so that this works:
+    fun thrice(fn) {
+        for (var i = 1; i <= 3; i = i + 1) {
+            fn(i);
+        }
+    }
+    thrice(fun (a) {
+        print a;
+    });
+    // "1".
+    // "2".
+    // "3
+    How do you handle the tricky case of an anonymous function expression occurring
+    in an expression statement:
+    fun () {};
+[ ] Extend the resolver to report an error if a local variable is never used.
+[ ] Our resolver calculates which environment the variable is found in, but it’s still
+    looked up by name in that map. A more e"icient environment representation
+    would store local variables in an array and look them up by index.
+    Extend the resolver to associate a unique index for each local variable declared in a
+    scope. When resolving a variable access, look up both the scope the variable is in
+    and its index and store that. In the interpreter, use that to quickly access a variable
+    by its index instead of using a map.

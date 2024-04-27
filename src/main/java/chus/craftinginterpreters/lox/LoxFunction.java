@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class LoxFunction implements LoxCallable {
   private final Stmt.Function declaration;
+  private final Environment closure;
 
   @Override
   public int arity() {
@@ -14,13 +15,18 @@ public class LoxFunction implements LoxCallable {
 
   @Override
   public Object call(Interpreter interpreter, List<Object> arguments) {
-    Environment environment = new Environment(interpreter.globals);
+    Environment environment = new Environment(closure);
 
     for (int i = 0; i < declaration.params.size(); i++) {
       environment.define(declaration.params.get(i).lexeme, arguments.get(i));
     }
+    
+    try {
+      interpreter.executeBlock(declaration.body, environment);
+    } catch (Return returnValue) {
+      return returnValue.value;
+    }
 
-    interpreter.executeBlock(declaration.body, environment);
     return null;
   }
 
