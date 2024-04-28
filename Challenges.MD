@@ -83,3 +83,22 @@
     scope. When resolving a variable access, look up both the scope the variable is in
     and its index and store that. In the interpreter, use that to quickly access a variable
     by its index instead of using a map.
+
+- [ ] We have methods on instances, but there is no way to define “static” methods that can
+  be called directly on the class object itself. Add support for them. Use a class keyword 
+  preceding the method to indicate a static method that hangs off the class object.
+
+  class Math {
+    class square(n) {
+      return n * n;
+    }
+  }
+  
+  print Math.square(3); // Prints "9".
+  You can solve this however you like, but the “metaclasses” used by Smalltalk and Ruby are a
+  particularly elegant approach. Hint: Make LoxClass extend LoxInstance and go from there.
+  
+- [ ] Most modern languages support “getters” and “setters”—members on a class that look like field 
+  reads and writes but that actually execute user-defined code. Extend Lox to support getter
+  methods. These are declared without a parameter list. The body of the getter is executed when
+  a property with that name is accessed.
