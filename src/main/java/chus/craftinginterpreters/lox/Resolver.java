@@ -13,10 +13,11 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
   Resolver(Interpreter interpreter) {
     this.interpreter = interpreter;
   }
-  
+
   private enum FunctionType {
     NONE,
-    FUNCTION
+    FUNCTION,
+    METHOD
   }
 
   @Override
@@ -35,6 +36,18 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
       resolve(stmt.initializer);
     }
     define(stmt.name);
+    return null;
+  }
+
+  @Override
+  public Void visitClassStmt(Stmt.Class stmt) {
+    define(stmt.name);
+    declare(stmt.name);
+
+    for (Stmt.Function method : stmt.methods) {
+      FunctionType declaration = FunctionType.METHOD;
+      resolveFunction(method, declaration);
+    }
     return null;
   }
 
@@ -121,6 +134,19 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
       resolve(argument);
     }
 
+    return null;
+  }
+
+  @Override
+  public Void visitGetExpr(Expr.Get expr) {
+    resolve(expr.object);
+    return null;
+  }
+
+  @Override
+  public Void visitSetExpr(Expr.Set expr) {
+    resolve(expr.object);
+    resolve(expr.value);
     return null;
   }
 
