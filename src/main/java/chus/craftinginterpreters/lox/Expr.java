@@ -13,6 +13,8 @@ abstract class Expr {
 
     R visitSetExpr(Set expr);
 
+    R visitSuperExpr(Super expr);
+
     R visitThisExpr(This expr);
 
     R visitBinaryExpr(Binary expr);
@@ -71,6 +73,17 @@ abstract class Expr {
     @Override
     <R> R accept(Visitor<R> visitor) {
       return visitor.visitSetExpr(this);
+    }
+  }
+
+  @AllArgsConstructor
+  static class Super extends Expr {
+    final Token keyword;
+    final Token method;
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitSuperExpr(this);
     }
   }
 

@@ -37,6 +37,7 @@ abstract class Stmt {
   @AllArgsConstructor
   static class Class extends Stmt {
     final Token name;
+    final Expr.Variable superclass;
     final List<Stmt.Function> methods;
 
     @Override
